@@ -3,7 +3,7 @@ import google.generativeai as genai
 
 st.set_page_config(page_title="Mi Asistente de la Salud", page_icon="🩺")
 
-st.title("🩺 Mi Asistente de la Salud")
+st.title("👨🏼‍⚕️ Mi Asistente de la Salud")
 st.write("Bienvenido a tu asistente personal de salud. Aquí puedes hacer preguntas relacionadas con tu bienestar y recibir respuestas informativas.")
 
 st.markdown("""
@@ -63,7 +63,7 @@ with col2:
                 st.error(f"Error al llamar a Gemini: {e}")
 
 st.divider()
-st.subheader("🗨️ Conversación")
+st.subheader("💬 Conversación")
 
 chat_css = """
 <style>

@@ -1,6 +1,8 @@
 import streamlit as st
 import google.generativeai as genai
-
+from gtts import gTTS
+import io
+import re
 st.set_page_config(page_title="Mi Asistente de la Salud", page_icon="🩺")
 
 st.title("👨🏼‍⚕️ Mi Asistente de la Salud")
@@ -50,17 +52,20 @@ with col2:
                 resp = model.generate_content(full_prompt)
                
                 if hasattr(resp, "text") and resp.text:
-                    respuesta = resp.text.strip()
+                    response = resp.text.strip()
                 else:
-                    respuesta = resp.candidates[0].content.parts[0].text.strip()
+                    response = resp.candidates[0].content.parts[0].text.strip()
 
           
-                st.session_state.messages.append({"role": "assistant", "text": respuesta})
+                st.session_state.messages.append({"role": "assistant", "text": response})
                 st.success("Respuesta recibida.")
 
             except Exception as e:
                 st.session_state.messages.append({"role": "assistant", "text": f"Error al llamar a Gemini: {e}"})
                 st.error(f"Error al llamar a Gemini: {e}")
+    if st.button("Limpiar Conversación"):
+        st.session_state.messages = []
+        st.success("Conversación limpiada.")
 
 st.divider()
 st.subheader("💬 Conversación")
@@ -101,7 +106,18 @@ for msg in st.session_state.messages:
     if msg["role"] == "user":
         st.markdown(f'<div class="chat-message user"><b>👨🏽‍💻Tú:</b><br>{msg["content"]}</div>', unsafe_allow_html=True)
     else:
-        st.markdown(f'<div class="chat-message assistant"><b>👨🏼‍⚕️Asistente:</b><br>{msg["text"]}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="chat-message assistant"><b>👨🏼‍⚕️Asistente:</b><br>{msg["text"]}', unsafe_allow_html=True)
+        
+        clean_text = re.sub(r"[^a-zA-ZáéíóúÁÉÍÓÚñÑ0-9,;.?!¡¿\s]", "", msg["text"])
+        tts = gTTS(text=clean_text, lang='es')
+    
+        audio_buffer = io.BytesIO()
+        tts.write_to_fp(audio_buffer)
+        audio_buffer.seek(0)
+        audio_bytes = audio_buffer.read()
+        st.audio(audio_bytes, format="audio/mp3")
+
+        st.markdown('</div>', unsafe_allow_html=True)
 
 st.markdown('</div>', unsafe_allow_html=True)
 

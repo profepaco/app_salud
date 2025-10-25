@@ -78,16 +78,21 @@ chat_css = """
     margin: 8px 0;
     max-width: 80%;
     line-height: 1.5;
-    font-size: 16px;
+    word-wrap: break-word;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    transition: background-color 0.3s, color 0.3s;
+    font-size: 1.1rem;
 }
 .user {
-    background-color: #0b4f4a; 
+    background-color: #DCF8C6;
+    color: #000000;
     align-self: flex-start;
     margin-right: auto;
     text-align: left;
 }
 .assistant {
-    background-color: #45556c;
+    background-color: #F1F0F0;
+    color: #000000;
     align-self: flex-end;
     margin-left: auto;
     text-align: left;
@@ -95,6 +100,21 @@ chat_css = """
 .chat-container {
     display: flex;
     flex-direction: column;
+}
+
+@media (prefers-color-scheme: dark) {
+    .user {
+        background-color: #075E54; 
+        color: #E0E0E0;
+    }
+    .assistant {
+        background-color: #2A2A2A; 
+        color: #EAEAEA;
+    }
+    body {
+        background-color: #121212;
+        color: #FFFFFF;
+    }
 }
 </style>
 """
